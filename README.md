@@ -1,19 +1,21 @@
-# Bring Your Own Addons
+# 🚀 Bring Your Own Addons
 
-Bring Your Own Addons, or BYO Addons, is a small Kubernetes platform project that demonstrates how a platform team can manage cluster addons in a repeatable, GitOps-friendly way.
+**Bring Your Own Addons (BYO Addons)** is a small Kubernetes platform project that shows how a platform team can manage cluster addons in a repeatable, GitOps-friendly way.
 
-In a Kubernetes cluster, an "addon" is a supporting component that makes the cluster usable. Examples include:
+In Kubernetes, an **addon** is a supporting component that makes the cluster usable. Examples include:
 
-- CNI: networking, such as Cilium, Calico, or Flannel.
-- CSI: storage, such as OpenEBS, Rook Ceph, or Longhorn.
-- GitOps: continuous delivery, such as Argo CD.
-- Observability: monitoring and dashboards, such as Prometheus and Grafana.
+- 🌐 **CNI**: networking, such as Cilium, Calico, or Flannel.
+- 💾 **CSI**: storage, such as OpenEBS, Rook Ceph, or Longhorn.
+- 🔁 **GitOps**: continuous delivery, such as Argo CD.
+- 📊 **Observability**: monitoring and dashboards, such as Prometheus and Grafana.
 
-The main idea of this project is simple: instead of hard-coding one networking tool, one storage tool, and one monitoring stack, the cluster owner describes the desired addon stack in a Kubernetes custom resource named `AddonSet`. The operator watches that resource, records the desired state, and reports status. Argo CD examples in this repo show how the real addons can be synced from Git or Helm charts.
+The main idea is simple: instead of hard-coding one networking tool, one storage tool, and one monitoring stack, the cluster owner describes the desired addon stack in a Kubernetes custom resource named `AddonSet`. The operator watches that resource, records the desired state, and reports status. Argo CD examples in this repo show how the real addons can be synced from Git or Helm charts.
 
 This is a starter platform/operator project, not a finished production addon marketplace. Version `0.1.0` focuses on proving the Kubernetes operator pattern clearly.
 
-## Why This Project Exists
+---
+
+## ❓ Why This Project Exists
 
 Kubernetes clusters usually need the same supporting services before application teams can deploy safely:
 
@@ -26,13 +28,13 @@ Without a system like this, every cluster becomes slightly different. Someone in
 
 BYO Addons solves that problem by creating a single platform contract:
 
-- The desired addon list is written as YAML.
-- The operator watches that YAML through the Kubernetes API.
-- The operator stores a normalized desired-state record for each enabled component.
-- The status of the `AddonSet` shows whether the desired components were reconciled.
-- GitOps manifests show how Argo CD can install the actual addon charts.
+- ✅ The desired addon list is written as YAML.
+- 👀 The operator watches that YAML through the Kubernetes API.
+- 🧾 The operator stores a normalized desired-state record for each enabled component.
+- 📌 The status of the `AddonSet` shows whether the desired components were reconciled.
+- 🔄 GitOps manifests show how Argo CD can install the actual addon charts.
 
-The significance of the project is that it demonstrates a real platform engineering pattern:
+The project demonstrates a real platform engineering pattern:
 
 - custom resources
 - reconciliation loops
@@ -45,7 +47,9 @@ The significance of the project is that it demonstrates a real platform engineer
 - Terraform and Ansible bootstrap examples
 - Prometheus and Grafana monitoring examples
 
-## Current Scope
+---
+
+## 📦 Current Scope
 
 This project currently does:
 
@@ -71,7 +75,9 @@ This project does not yet:
 
 Those missing items are good future enhancements and are listed later in this README.
 
-## High-Level Architecture
+---
+
+## 🏗️ High-Level Architecture
 
 ```mermaid
 flowchart LR
@@ -89,12 +95,14 @@ flowchart LR
 
 There are two connected flows:
 
-1. Operator flow: `AddonSet` is applied to Kubernetes, the operator reconciles it, creates desired-state `ConfigMap` objects, and updates status.
-2. GitOps flow: Argo CD reads the Git repository and applies the operator chart plus addon charts.
+1. **Operator flow**: `AddonSet` is applied to Kubernetes, the operator reconciles it, creates desired-state `ConfigMap` objects, and updates status.
+2. **GitOps flow**: Argo CD reads the Git repository and applies the operator chart plus addon charts.
 
 In this starter version, these flows are intentionally separate. The operator records what should exist. Argo CD examples show how actual charts would be installed. A future version can connect them by generating Argo CD `Application` resources directly from the `AddonSet`.
 
-## End-to-End Project Flow
+---
+
+## 🔄 End-to-End Project Flow
 
 ### 1. A platform engineer chooses the addon stack
 
@@ -249,7 +257,9 @@ gitops/argocd/applications/byo-addons-root.yaml
 
 It points Argo CD at the `gitops/argocd/applications` folder so Argo CD can create the child applications.
 
-## Setup From Zero
+---
+
+## 🛠️ Setup From Zero
 
 ### Prerequisites
 
@@ -347,20 +357,18 @@ make undeploy
 Install the operator chart:
 
 ```bash
-helm upgrade --install byo-addons charts/byo-addons-operator \
-  --namespace byo-addons-system \
-  --create-namespace \
-  --include-crds
+helm upgrade --install byo-addons charts/byo-addons-operator \\
+  --namespace byo-addons-system \\
+  --create-namespace
 ```
 
 Install the operator and also create the sample `AddonSet`:
 
 ```bash
-helm upgrade --install byo-addons charts/byo-addons-operator \
-  --namespace byo-addons-system \
-  --create-namespace \
-  --include-crds \
-  --set sampleAddonSet.enabled=true \
+helm upgrade --install byo-addons charts/byo-addons-operator \\
+  --namespace byo-addons-system \\
+  --create-namespace \\
+  --set sampleAddonSet.enabled=true \\
   --set sampleAddonSet.clusterName=dev-kind
 ```
 
@@ -373,7 +381,9 @@ kubectl logs -n byo-addons-system deploy/byo-addons-byo-addons-operator
 
 The exact Deployment name can change depending on the Helm release name. Use `kubectl get deploy -n byo-addons-system` if the log command name differs.
 
-## GitOps Bootstrap With Argo CD
+---
+
+## 🔁 GitOps Bootstrap With Argo CD
 
 Argo CD should already be installed, or you can use the Terraform example to install it.
 
@@ -412,7 +422,9 @@ repoURL: https://github.com/your-username/byo-addons.git
 
 Also update `gitops/argocd/projects/byo-addons.yaml` so your real repo is allowed in `sourceRepos`.
 
-## Terraform Bootstrap
+---
+
+## ⚙️ Terraform Bootstrap
 
 The Terraform example is in:
 
@@ -450,7 +462,9 @@ install_argocd = false
 
 `terraform.tfvars` is ignored by Git because it is local environment state.
 
-## Ansible Bootstrap
+---
+
+## 🤖 Ansible Bootstrap
 
 The Ansible example is in:
 
@@ -478,7 +492,9 @@ It:
 
 Use Terraform when you want infrastructure-style provisioning. Use Ansible when you want a repeatable operational bootstrap playbook.
 
-## Placeholder Values To Replace
+---
+
+## 🔧 Placeholder Values To Replace
 
 This repo contains several placeholder values because it is a starter/template project.
 
@@ -518,7 +534,9 @@ go mod tidy
 make test
 ```
 
-## Repository Layout
+---
+
+## 📁 Repository Layout
 
 ```text
 .
@@ -537,10 +555,13 @@ make test
 ├── PROJECT                  Kubebuilder project metadata
 ├── VERSION                  Current project version
 ├── go.mod                   Go module definition
-└── go.sum                   Go dependency checksums
+├── go.sum                   Go dependency checksums
+└── README.md                Main project documentation
 ```
 
-## File-by-File Explanation
+---
+
+## 🧩 File-by-File Explanation
 
 ### Root Files
 
@@ -594,254 +615,4 @@ make test
 
 | File | Purpose |
 | --- | --- |
-| `charts/byo-addons-operator/Chart.yaml` | Helm chart metadata: name, version, app version, description, keywords, and homepage. |
-| `charts/byo-addons-operator/values.yaml` | Default configurable values for image, replica count, leader election, metrics, resources, and sample `AddonSet`. |
-| `charts/byo-addons-operator/crds/platform.byoaddons.io_addonsets.yaml` | CRD shipped with the Helm chart. Installed when using `--include-crds`. |
-| `charts/byo-addons-operator/templates/_helpers.tpl` | Helm helper templates for names, labels, namespaces, and service account naming. |
-| `charts/byo-addons-operator/templates/deployment.yaml` | Operator Deployment template. |
-| `charts/byo-addons-operator/templates/service.yaml` | Metrics Service template. |
-| `charts/byo-addons-operator/templates/serviceaccount.yaml` | ServiceAccount template. |
-| `charts/byo-addons-operator/templates/rbac.yaml` | ClusterRole, ClusterRoleBinding, leader-election Role, and RoleBinding templates. |
-| `charts/byo-addons-operator/templates/servicemonitor.yaml` | Optional ServiceMonitor template, enabled through Helm values. |
-| `charts/byo-addons-operator/templates/sample-addonset.yaml` | Optional sample `AddonSet`, enabled with `sampleAddonSet.enabled=true`. |
-
-### GitOps Files
-
-| File | Purpose |
-| --- | --- |
-| `gitops/argocd/projects/byo-addons.yaml` | Argo CD `AppProject` that allows this repo and supported Helm repositories as sources. |
-| `gitops/argocd/applications/byo-addons-root.yaml` | Root app-of-apps Argo CD `Application`. It points to the applications folder and excludes itself. |
-| `gitops/argocd/applications/byo-addons-operator.yaml` | Argo CD app that installs the BYO Addons operator Helm chart from this repo. |
-| `gitops/argocd/applications/oss-cni-cilium.yaml` | Argo CD app that installs Cilium from the Cilium Helm repository. |
-| `gitops/argocd/applications/oss-csi-openebs.yaml` | Argo CD app that installs OpenEBS from the OpenEBS Helm repository. |
-| `gitops/argocd/applications/observability-kube-prometheus-stack.yaml` | Argo CD app that installs kube-prometheus-stack. |
-
-### Addon Catalog Files
-
-| File | Purpose |
-| --- | --- |
-| `addons/catalog/kustomization.yaml` | Kustomize entry for addon provider catalog ConfigMaps. |
-| `addons/catalog/cni/catalog.yaml` | Catalog of open source CNI providers: Cilium, Calico OSS, and Flannel. |
-| `addons/catalog/csi/catalog.yaml` | Catalog of open source CSI providers: OpenEBS, Rook Ceph, Longhorn, and democratic-csi. |
-| `addons/catalog/observability/catalog.yaml` | Catalog of observability providers: kube-prometheus-stack and Loki. |
-
-The current operator does not enforce this catalog yet. It is reference data for future validation and UI/API workflows.
-
-### Infrastructure Files
-
-| File | Purpose |
-| --- | --- |
-| `infra/terraform/kind/versions.tf` | Required Terraform version and provider versions. |
-| `infra/terraform/kind/variables.tf` | Terraform variables for kubeconfig path, Argo CD namespace, and whether to install Argo CD. |
-| `infra/terraform/kind/main.tf` | Creates namespaces and optionally installs Argo CD through Helm. |
-| `infra/terraform/kind/outputs.tf` | Prints useful namespace outputs after Terraform apply. |
-| `infra/ansible/inventory.ini` | Local Ansible inventory using `localhost`. |
-| `infra/ansible/requirements.yml` | Requires the `kubernetes.core` Ansible collection. |
-| `infra/ansible/bootstrap.yml` | Creates namespaces and applies the Argo CD project plus root application. |
-
-### Monitoring Files
-
-| File | Purpose |
-| --- | --- |
-| `monitoring/kustomization.yaml` | Kustomize entry for monitoring resources. |
-| `monitoring/prometheus/byo-addons-rules.yaml` | Prometheus alerts for operator scrape failure and reconciliation errors. |
-| `monitoring/grafana/dashboards/byo-addons-dashboard-configmap.yaml` | Grafana dashboard ConfigMap with panels for reconcile errors, reconcile duration, and queue depth. |
-
-### Documentation Files
-
-| File | Purpose |
-| --- | --- |
-| `docs/architecture.md` | Short architecture notes. |
-| `docs/versioning.md` | Semantic versioning and branching guidance. |
-
-## Important Code Concepts
-
-### Custom Resource Definition
-
-The CRD lets Kubernetes store and validate a new resource type. In this project, that resource is `AddonSet`.
-
-The Go structs in `api/v1alpha1/addonset_types.go` are the source of truth for the CRD. Kubebuilder markers such as `+kubebuilder:validation:Enum` and `+kubebuilder:subresource:status` generate Kubernetes schema behavior.
-
-### Reconciliation
-
-Reconciliation means the controller repeatedly tries to make the real cluster match the desired state.
-
-In this project:
-
-- desired state is `AddonSet.spec`
-- observed state is whether desired-state `ConfigMap` objects exist
-- output state is `AddonSet.status`
-
-The reconcile function is idempotent. Running it multiple times should produce the same final state.
-
-### Finalizer
-
-A finalizer delays deletion until cleanup is done.
-
-This project adds:
-
-```text
-addonset.platform.byoaddons.io/finalizer
-```
-
-When an `AddonSet` is deleted, the operator deletes the desired-state `ConfigMap` objects first, then removes the finalizer. After that, Kubernetes can finish deleting the `AddonSet`.
-
-### Owner Reference
-
-The controller sets the `AddonSet` as the owner of each desired-state `ConfigMap`. This helps Kubernetes understand the relationship between objects and allows the controller to watch owned ConfigMaps.
-
-### Status Conditions
-
-The operator writes a `Ready` condition. If all enabled components were reconciled, the condition is true with reason `ComponentsReconciled`. Otherwise it is false with reason `ComponentsPending`.
-
-## How To Use The Project In Practice
-
-For local learning:
-
-1. Create a local cluster with `kind`.
-2. Run `make install`.
-3. Run `make deploy`.
-4. Apply `config/samples/platform_v1alpha1_addonset.yaml`.
-5. Inspect `AddonSet.status`.
-6. Inspect the generated desired-state `ConfigMap` objects.
-
-For GitOps-style usage:
-
-1. Push this repo to your own GitHub account or organization.
-2. Replace all placeholder repository URLs.
-3. Replace the image repository with your own published operator image.
-4. Install Argo CD.
-5. Apply `gitops/argocd/projects/byo-addons.yaml`.
-6. Apply `gitops/argocd/applications/byo-addons-root.yaml`.
-7. Let Argo CD sync the operator and addon applications.
-
-For production extension:
-
-1. Add validation against the provider catalog.
-2. Generate Argo CD `Application` resources from `AddonSet.spec.components`.
-3. Add health checks for real workloads.
-4. Add tests and e2e validation.
-5. Add environment overlays for dev, staging, and production.
-
-## What Each Make Command Does
-
-| Command | Meaning |
-| --- | --- |
-| `make help` | Lists available Make targets. |
-| `make fmt` | Runs `go fmt ./...`. |
-| `make vet` | Runs `go vet ./...`. |
-| `make test` | Runs formatting, vetting, and Go tests. |
-| `make manifests` | Regenerates CRDs and RBAC if `controller-gen` is installed. Otherwise it uses checked-in manifests. |
-| `make build` | Builds the operator binary at `bin/manager`. |
-| `make docker-build` | Builds the operator container image using `Dockerfile`. |
-| `make install` | Builds CRD YAML with Kustomize and applies it to the current cluster. |
-| `make deploy` | Builds the full Kustomize install and applies it to the current cluster. |
-| `make undeploy` | Deletes the full Kustomize install from the current cluster. |
-| `make helm-lint` | Validates the Helm chart. |
-| `make render` | Renders Kustomize and Helm YAML locally into `/tmp`. |
-
-## Common Troubleshooting
-
-### `kubectl get addonsets` says the resource does not exist
-
-The CRD is not installed. Run:
-
-```bash
-make install
-```
-
-### The operator pod cannot pull the image
-
-The default image is:
-
-```text
-ghcr.io/example/byo-addons-operator:0.1.0
-```
-
-That is a placeholder. Build and push your own image, then update:
-
-- `Makefile`
-- `config/default/kustomization.yaml`
-- `charts/byo-addons-operator/values.yaml`
-- `gitops/argocd/applications/byo-addons-operator.yaml` if you override values there
-
-### Argo CD cannot access the repo
-
-Replace:
-
-```text
-https://github.com/example/byo-addons.git
-```
-
-with your real repo URL in:
-
-- `gitops/argocd/projects/byo-addons.yaml`
-- `gitops/argocd/applications/byo-addons-root.yaml`
-- `gitops/argocd/applications/byo-addons-operator.yaml`
-
-### No actual Cilium or OpenEBS pods appear after applying AddonSet
-
-That is expected in version `0.1.0`. The operator records desired state; it does not directly install those addons yet.
-
-To install real addons, use the Argo CD application manifests or install the Helm charts manually.
-
-### ServiceMonitor or PrometheusRule fails to apply
-
-Those resources require Prometheus Operator CRDs. Install kube-prometheus-stack first, or skip the monitoring manifests.
-
-
-Easy to Understand Explanation:
-
-1. Problem:
-   Kubernetes clusters need networking, storage, GitOps, and monitoring. Installing those manually makes clusters inconsistent.
-
-2. Solution:
-   This project creates a Kubernetes operator with a custom resource called `AddonSet`. The `AddonSet` is a declarative contract for the desired addon stack.
-
-3. How it works:
-   The CRD registers `AddonSet` with Kubernetes. The controller manager runs in the cluster. The reconciler watches `AddonSet` objects. For each enabled component, it records desired state in a ConfigMap and updates status. A finalizer cleans up those records on deletion.
-
-4. GitOps integration:
-   Argo CD manifests show how the operator and real addon Helm charts can be synced from Git. The root app uses app-of-apps to create child apps.
-
-5. Packaging:
-   The operator can be installed with Kustomize or Helm. The Dockerfile builds the controller image.
-
-6. Observability:
-   The project includes metrics scraping configuration, Prometheus alerts, and a Grafana dashboard starter.
-
-7. Limitations:
-   The current version does not directly install Helm charts from the `AddonSet`. That is intentionally left as the next step so the base operator pattern stays simple and understandable.
-
-8. Future work:
-   Generate Argo CD `Application` resources from `AddonSet`, validate providers against the catalog, add addon health checks, and add e2e tests with `kind`.
-
-## Future Enhancements
-
-- Generate Argo CD `Application` resources from `AddonSet.spec.components`.
-- Add admission validation so only approved provider catalog entries are allowed.
-- Add health checks that inspect real Deployments, DaemonSets, StorageClasses, and Services.
-- Add e2e tests against a local `kind` cluster.
-- Add environment overlays for `dev`, `stage`, and `prod`.
-- Add support for Flux as another GitOps engine.
-- Add documentation for building and pushing the operator image in CI.
-
-## Versioning
-
-This project uses semantic versioning.
-
-Current version:
-
-```text
-0.1.0
-```
-
-The version appears in:
-
-- `VERSION`
-- `charts/byo-addons-operator/Chart.yaml`
-- `Makefile`
-- `config/default/kustomization.yaml`
-- `charts/byo-addons-operator/values.yaml`
-
-See `docs/versioning.md` for release guidance.
+| `charts/byo-addons-operator/Chart.yaml` | Helm chart metadata: name, version, app version, description, keywords, and 

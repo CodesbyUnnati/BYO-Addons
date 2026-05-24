@@ -7,5 +7,5 @@ resources:
 
 images:
 - name: controller
-  newName: ghcr.io/example/byo-addons-operator
+  newName: byo-addons-operator
   newTag: 0.1.0

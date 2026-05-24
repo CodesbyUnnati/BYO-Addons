@@ -77,12 +77,6 @@ spec:
                       enum:
                       - CNI
                       - CSI
-                      - Ingress
-                      - Observability
-                      - GitOps
-                      - Security
-                      - Policy
-                      - Other
                     provider:
                       type: string
                       minLength: 1

@@ -42,13 +42,3 @@ spec:
             enabled: false
           zfs:
             enabled: false
-  - name: kube-prometheus-stack
-    type: Observability
-    provider: Prometheus Community
-    version: 60.x
-    namespace: monitoring
-    enabled: true
-    source:
-      repoURL: https://prometheus-community.github.io/helm-charts
-      chart: kube-prometheus-stack
-      targetRevision: 60.x

@@ -1,31 +1,22 @@
 # Architecture
 
-BYO Addons is a small open source platform layer for Kubernetes addon selection. It is inspired by the "bring your own CNI" idea: the cluster team owns a baseline platform, while application and platform teams can choose supported free and open source providers from a curated catalog.
+BYO Addons is a small Kubernetes operator project. It defines an `AddonSet` custom resource and reconciles each enabled addon component into a desired-state `ConfigMap`.
 
-## Control Plane
+## Core Flow
 
-The operator owns the `AddonSet` custom resource:
+1. A user applies an `AddonSet`.
+2. Kubernetes stores it through the `platform.byoaddons.io/v1alpha1` CRD.
+3. The controller watches the `AddonSet`.
+4. The controller adds a finalizer.
+5. For each enabled component, the controller creates or updates an owned desired-state `ConfigMap`.
+6. The controller updates `AddonSet.status`.
+7. When the `AddonSet` is deleted, the controller removes owned ConfigMaps and then removes the finalizer.
 
-- `spec.clusterName` identifies the target cluster.
-- `spec.gitOpsEngine` names the external applier, usually Argo CD.
-- `spec.components` lists desired addons such as Cilium, OpenEBS, or kube-prometheus-stack.
+## Tooling
 
-In version `0.1.0`, reconciliation records desired component state as owned ConfigMaps and reports status on the `AddonSet`. That is intentionally modest: it demonstrates the Kubernetes reconciliation loop without hiding too much logic. A future branch can promote this into direct Argo CD `Application` generation or Helm SDK-based installation.
+- Kubebuilder-style layout: API, controller, manager, CRD, RBAC, and Kustomize config.
+- Kustomize: local/raw deployment path for CRD, RBAC, and manager manifests.
+- Helm: packaged and configurable operator installation.
+- Argo CD: optional GitOps example for installing the operator and addon charts.
 
-## Reconciliation Flow
-
-1. A user or Argo CD applies an `AddonSet`.
-2. The controller watches the resource.
-3. For each enabled component, it creates or updates a desired-state ConfigMap.
-4. The controller updates component status and the aggregate `Ready` condition.
-5. If the `AddonSet` is deleted, the finalizer cleans up owned desired-state ConfigMaps.
-
-## Tooling Roles
-
-- Kubebuilder layout: API, controller, RBAC, CRD, and manager structure.
-- Helm: reusable operator installation chart.
-- Kustomize: raw manifest deployment and overlays.
-- Argo CD: GitOps sync engine for operator and addon manifests.
-- Terraform: cluster namespace and Argo CD bootstrap.
-- Ansible: repeatable post-cluster bootstrap tasks.
-- Prometheus and Grafana: operator metrics, alerts, and dashboards.
+The current version records addon intent. It does not directly install addon Helm charts yet.

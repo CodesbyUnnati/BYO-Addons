@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-IMG ?= ghcr.io/example/byo-addons-operator:0.1.0
+IMG ?= byo-addons-operator:0.1.0
 KUSTOMIZE ?= kustomize
 HELM ?= helm
 KUBECTL ?= kubectl

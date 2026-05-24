@@ -1,3 +1,0 @@
-resources:
-- prometheus/byo-addons-rules.yaml
-- grafana/dashboards/byo-addons-dashboard-configmap.yaml

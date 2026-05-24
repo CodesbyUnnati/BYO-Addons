@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/example/byo-addons-operator
+  repository: byo-addons-operator
   tag: "0.1.0"
   pullPolicy: IfNotPresent
 
@@ -17,9 +17,6 @@ leaderElection:
 metrics:
   enabled: true
   port: 8080
-  serviceMonitor:
-    enabled: false
-    labels: {}
 
 resources:
   requests:

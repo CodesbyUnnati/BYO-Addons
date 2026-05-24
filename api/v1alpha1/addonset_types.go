@@ -16,18 +16,12 @@ import (
 )
 
 // AddonType describes the role an addon plays in the cluster platform.
-// +kubebuilder:validation:Enum=CNI;CSI;Ingress;Observability;GitOps;Security;Policy;Other
+// +kubebuilder:validation:Enum=CNI;CSI
 type AddonType string
 
 const (
-	AddonTypeCNI           AddonType = "CNI"
-	AddonTypeCSI           AddonType = "CSI"
-	AddonTypeIngress       AddonType = "Ingress"
-	AddonTypeObservability AddonType = "Observability"
-	AddonTypeGitOps        AddonType = "GitOps"
-	AddonTypeSecurity      AddonType = "Security"
-	AddonTypePolicy        AddonType = "Policy"
-	AddonTypeOther         AddonType = "Other"
+	AddonTypeCNI AddonType = "CNI"
+	AddonTypeCSI AddonType = "CSI"
 )
 
 // AddonSource describes where the reconciler or GitOps system can find the addon.

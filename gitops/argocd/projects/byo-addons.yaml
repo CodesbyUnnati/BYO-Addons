@@ -12,7 +12,6 @@ spec:
   - https://openebs.github.io/openebs
   - https://charts.longhorn.io
   - https://charts.rook.io/release
-  - https://prometheus-community.github.io/helm-charts
   destinations:
   - namespace: '*'
     server: https://kubernetes.default.svc

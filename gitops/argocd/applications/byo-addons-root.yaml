@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: byo-addons-root
+  namespace: argocd
+spec:
+  project: byo-addons
+  source:
+    repoURL: https://github.com/example/byo-addons.git
+    targetRevision: main
+    path: gitops/argocd/applications
+    directory:
+      recurse: false
+      exclude: byo-addons-root.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

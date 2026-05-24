@@ -1,0 +1,50 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: byo-addons-manager-role
+rules:
+- apiGroups:
+  - platform.byoaddons.io
+  resources:
+  - addonsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - platform.byoaddons.io
+  resources:
+  - addonsets/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - platform.byoaddons.io
+  resources:
+  - addonsets/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch

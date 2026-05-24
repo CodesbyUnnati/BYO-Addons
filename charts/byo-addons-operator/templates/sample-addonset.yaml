@@ -1,0 +1,31 @@
+{{- if .Values.sampleAddonSet.enabled -}}
+apiVersion: platform.byoaddons.io/v1alpha1
+kind: AddonSet
+metadata:
+  name: baseline-oss
+  namespace: {{ include "byo-addons-operator.namespace" . }}
+  labels:
+    {{- include "byo-addons-operator.labels" . | nindent 4 }}
+spec:
+  clusterName: {{ .Values.sampleAddonSet.clusterName | quote }}
+  gitOpsEngine: ArgoCD
+  components:
+  - name: cilium
+    type: CNI
+    provider: Cilium
+    namespace: kube-system
+    enabled: true
+    source:
+      repoURL: https://helm.cilium.io
+      chart: cilium
+      targetRevision: 1.15.x
+  - name: openebs-localpv
+    type: CSI
+    provider: OpenEBS
+    namespace: openebs
+    enabled: true
+    source:
+      repoURL: https://openebs.github.io/openebs
+      chart: openebs
+      targetRevision: 4.x
+{{- end }}

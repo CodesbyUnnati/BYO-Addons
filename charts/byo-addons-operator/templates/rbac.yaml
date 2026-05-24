@@ -1,0 +1,109 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "byo-addons-operator.fullname" . }}-manager-role
+  labels:
+    {{- include "byo-addons-operator.labels" . | nindent 4 }}
+rules:
+- apiGroups:
+  - platform.byoaddons.io
+  resources:
+  - addonsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - platform.byoaddons.io
+  resources:
+  - addonsets/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - platform.byoaddons.io
+  resources:
+  - addonsets/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "byo-addons-operator.fullname" . }}-manager-rolebinding
+  labels:
+    {{- include "byo-addons-operator.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "byo-addons-operator.fullname" . }}-manager-role
+subjects:
+- kind: ServiceAccount
+  name: {{ include "byo-addons-operator.serviceAccountName" . }}
+  namespace: {{ include "byo-addons-operator.namespace" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "byo-addons-operator.fullname" . }}-leader-election-role
+  namespace: {{ include "byo-addons-operator.namespace" . }}
+  labels:
+    {{- include "byo-addons-operator.labels" . | nindent 4 }}
+rules:
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - create
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "byo-addons-operator.fullname" . }}-leader-election-rolebinding
+  namespace: {{ include "byo-addons-operator.namespace" . }}
+  labels:
+    {{- include "byo-addons-operator.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "byo-addons-operator.fullname" . }}-leader-election-role
+subjects:
+- kind: ServiceAccount
+  name: {{ include "byo-addons-operator.serviceAccountName" . }}
+  namespace: {{ include "byo-addons-operator.namespace" . }}

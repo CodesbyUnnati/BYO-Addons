@@ -1,0 +1,16 @@
+apiVersion: v2
+name: byo-addons-operator
+description: Bring Your Own Addons operator for free and open source Kubernetes platform components.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+home: https://github.com/example/byo-addons
+keywords:
+- kubernetes
+- operator
+- addons
+- cni
+- csi
+- gitops
+maintainers:
+- name: BYO Addons Maintainers

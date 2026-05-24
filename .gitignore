@@ -1,0 +1,17 @@
+.DS_Store
+bin/
+dist/
+.cache/
+coverage.out
+*.test
+
+# Local clusters and generated state
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+kubeconfig*
+
+# IDEs
+.idea/
+.vscode/

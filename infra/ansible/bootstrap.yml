@@ -1,0 +1,30 @@
+---
+- name: Bootstrap BYO Addons GitOps entrypoint
+  hosts: local
+  gather_facts: false
+  vars:
+    repo_root: "{{ playbook_dir }}/../.."
+    argocd_namespace: argocd
+  tasks:
+  - name: Ensure platform namespaces exist
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: "{{ item }}"
+    loop:
+    - "{{ argocd_namespace }}"
+    - byo-addons-system
+    - monitoring
+
+  - name: Apply Argo CD project
+    kubernetes.core.k8s:
+      state: present
+      src: "{{ repo_root }}/gitops/argocd/projects/byo-addons.yaml"
+
+  - name: Apply root GitOps application
+    kubernetes.core.k8s:
+      state: present
+      src: "{{ repo_root }}/gitops/argocd/applications/byo-addons-root.yaml"

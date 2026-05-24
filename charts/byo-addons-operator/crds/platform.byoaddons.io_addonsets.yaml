@@ -1,0 +1,169 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: addonsets.platform.byoaddons.io
+spec:
+  group: platform.byoaddons.io
+  names:
+    kind: AddonSet
+    listKind: AddonSetList
+    plural: addonsets
+    shortNames:
+    - aset
+    singular: addonset
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: true
+    subresources:
+      status: {}
+    additionalPrinterColumns:
+    - name: Cluster
+      type: string
+      jsonPath: .spec.clusterName
+    - name: Desired
+      type: integer
+      jsonPath: .status.desiredComponents
+    - name: Ready
+      type: integer
+      jsonPath: .status.readyComponents
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
+    schema:
+      openAPIV3Schema:
+        type: object
+        required:
+        - spec
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            type: object
+            required:
+            - clusterName
+            - components
+            properties:
+              clusterName:
+                type: string
+                minLength: 1
+              gitOpsEngine:
+                type: string
+                default: ArgoCD
+                enum:
+                - ArgoCD
+                - Flux
+                - None
+              components:
+                type: array
+                minItems: 1
+                items:
+                  type: object
+                  required:
+                  - name
+                  - type
+                  - provider
+                  properties:
+                    name:
+                      type: string
+                      minLength: 1
+                    type:
+                      type: string
+                      enum:
+                      - CNI
+                      - CSI
+                      - Ingress
+                      - Observability
+                      - GitOps
+                      - Security
+                      - Policy
+                      - Other
+                    provider:
+                      type: string
+                      minLength: 1
+                    version:
+                      type: string
+                    namespace:
+                      type: string
+                    enabled:
+                      type: boolean
+                      default: true
+                    source:
+                      type: object
+                      properties:
+                        repoURL:
+                          type: string
+                        chart:
+                          type: string
+                        path:
+                          type: string
+                        targetRevision:
+                          type: string
+                    values:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+          status:
+            type: object
+            properties:
+              observedGeneration:
+                type: integer
+                format: int64
+              readyComponents:
+                type: integer
+                format: int32
+              desiredComponents:
+                type: integer
+                format: int32
+              components:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    type:
+                      type: string
+                    provider:
+                      type: string
+                    ready:
+                      type: boolean
+                    message:
+                      type: string
+                    observed:
+                      type: string
+                    updatedAt:
+                      type: string
+                      format: date-time
+              conditions:
+                type: array
+                x-kubernetes-list-type: map
+                x-kubernetes-list-map-keys:
+                - type
+                items:
+                  type: object
+                  required:
+                  - type
+                  - status
+                  - reason
+                  - message
+                  - lastTransitionTime
+                  properties:
+                    type:
+                      type: string
+                    status:
+                      type: string
+                    observedGeneration:
+                      type: integer
+                      format: int64
+                    reason:
+                      type: string
+                    message:
+                      type: string
+                    lastTransitionTime:
+                      type: string
+                      format: date-time

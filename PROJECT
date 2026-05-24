@@ -1,0 +1,16 @@
+domain: byoaddons.io
+layout:
+- go.kubebuilder.io/v4
+projectName: byo-addons
+repo: github.com/example/byo-addons
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: byoaddons.io
+  group: platform
+  kind: AddonSet
+  path: github.com/example/byo-addons/api/v1alpha1
+  version: v1alpha1
+version: "3"

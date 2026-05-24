@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: byo-addons-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: byo-addons-manager-role
+subjects:
+- kind: ServiceAccount
+  name: byo-addons-controller-manager
+  namespace: byo-addons-system

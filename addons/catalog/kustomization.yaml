@@ -1,0 +1,4 @@
+resources:
+- cni/catalog.yaml
+- csi/catalog.yaml
+- observability/catalog.yaml

@@ -1,0 +1,54 @@
+apiVersion: platform.byoaddons.io/v1alpha1
+kind: AddonSet
+metadata:
+  name: baseline-oss
+  namespace: byo-addons-system
+spec:
+  clusterName: dev-kind
+  gitOpsEngine: ArgoCD
+  components:
+  - name: cilium
+    type: CNI
+    provider: Cilium
+    version: 1.15.x
+    namespace: kube-system
+    enabled: true
+    source:
+      repoURL: https://helm.cilium.io
+      chart: cilium
+      targetRevision: 1.15.x
+    values:
+      kubeProxyReplacement: true
+      hubble:
+        enabled: true
+        relay:
+          enabled: true
+        ui:
+          enabled: true
+  - name: openebs-localpv
+    type: CSI
+    provider: OpenEBS
+    version: 4.x
+    namespace: openebs
+    enabled: true
+    source:
+      repoURL: https://openebs.github.io/openebs
+      chart: openebs
+      targetRevision: 4.x
+    values:
+      engines:
+        local:
+          lvm:
+            enabled: false
+          zfs:
+            enabled: false
+  - name: kube-prometheus-stack
+    type: Observability
+    provider: Prometheus Community
+    version: 60.x
+    namespace: monitoring
+    enabled: true
+    source:
+      repoURL: https://prometheus-community.github.io/helm-charts
+      chart: kube-prometheus-stack
+      targetRevision: 60.x

@@ -45,10 +45,6 @@ The significance of the project is that it demonstrates a real platform engineer
 - Terraform and Ansible bootstrap examples
 - Prometheus and Grafana monitoring examples
 
-In an interview, describe it as:
-
-> "I built a Kubernetes operator-based platform starter that lets a cluster owner declare the desired addon stack through an `AddonSet` custom resource. The operator reconciles that resource, records desired state per addon, updates readiness status, and integrates with GitOps examples so Argo CD can install open source providers like Cilium, OpenEBS, and kube-prometheus-stack."
-
 ## Current Scope
 
 This project currently does:
@@ -793,9 +789,8 @@ To install real addons, use the Argo CD application manifests or install the Hel
 
 Those resources require Prometheus Operator CRDs. Install kube-prometheus-stack first, or skip the monitoring manifests.
 
-## Interview Explanation
 
-Use this structure when explaining the project:
+Easy to Understand Explanation:
 
 1. Problem:
    Kubernetes clusters need networking, storage, GitOps, and monitoring. Installing those manually makes clusters inconsistent.
@@ -820,10 +815,6 @@ Use this structure when explaining the project:
 
 8. Future work:
    Generate Argo CD `Application` resources from `AddonSet`, validate providers against the catalog, add addon health checks, and add e2e tests with `kind`.
-
-Short interview version:
-
-> "BYO Addons is a Kubernetes platform operator. It defines an `AddonSet` CRD where a cluster owner declares required addons like CNI, CSI, and observability. The controller watches those resources, uses a reconciliation loop to create desired-state records, updates status conditions, and cleans up with a finalizer. The repo also includes Helm, Kustomize, Argo CD, Terraform, Ansible, and monitoring examples so the operator can fit into a real GitOps-based platform workflow."
 
 ## Future Enhancements
 

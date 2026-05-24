@@ -88,8 +88,8 @@ flowchart LR
   Operator --> Status["AddonSet status"]
   Git["Git repository"] --> Argo["Argo CD"]
   Argo --> OperatorInstall["Operator install"]
-  Argo --> CNI["CNI provider, for example Cilium"]
-  Argo --> CSI["CSI provider, for example OpenEBS"]
+  Argo --> CNI["CNI provider,example Cilium"]
+  Argo --> CSI["CSI provider,example OpenEBS"]
   Argo --> Observability["Prometheus and Grafana"]
 ```
 

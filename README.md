@@ -2,7 +2,7 @@
 
 **BYO Addons** is a simple Kubernetes operator project. It introduces a custom resource called `AddonSet`, where a platform engineer can define which cluster addons should exist, such as CNI and CSI providers.
 
-In this version, the operator does **not** install real Helm charts automatically. Instead, it records the desired addon configuration as Kubernetes `ConfigMap` objects and updates `AddonSet.status`. That keeps the project focused and easy to explain in an interview.
+In this version, the operator does **not** install real Helm charts automatically. Instead, it records the desired addon configuration as Kubernetes `ConfigMap` objects and updates `AddonSet.status`.
 
 ## 🧰 Tech Stack
 
@@ -66,8 +66,6 @@ flowchart LR
 ```
 
 ## 🔧 How I Set It Up From Scratch
-
-If an interviewer asks how the project was created, explain it like this.
 
 ### 1. Scaffolding With Kubebuilder
 

@@ -73,7 +73,7 @@ This project does not yet:
 - Check whether Cilium, OpenEBS, or Prometheus are actually healthy.
 - Include end-to-end tests against a real `kind` cluster.
 
-Those missing items are good future enhancements and are listed later in this README.
+These missing future enhancements are listed later in this README.
 
 ---
 

@@ -152,6 +152,9 @@ func (r *AddonSetReconciler) reconcileComponentConfigMap(ctx context.Context, ad
 			"engine":     addonSet.Spec.GitOpsEngine,
 			"cluster":    addonSet.Spec.ClusterName,
 		}
+		if configMap.Namespace != addonSet.Namespace {
+			return nil
+		}
 		return controllerutil.SetControllerReference(addonSet, configMap, r.Scheme)
 	})
 	if err != nil {

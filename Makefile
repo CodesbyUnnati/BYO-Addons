@@ -59,3 +59,7 @@ helm-lint: ## Validate the operator Helm chart.
 render: ## Render Kustomize and Helm locally.
 	$(KUSTOMIZE) build config/default >/tmp/byo-addons-kustomize.yaml
 	$(HELM) template byo-addons charts/byo-addons-operator >/tmp/byo-addons-helm.yaml
+
+.PHONY: sync-chart-crds
+sync-chart-crds: ## Sync CRDs from operator to Helm chart.
+	cp operator/config/crd/bases/*.yaml charts/byo-addons/crds/

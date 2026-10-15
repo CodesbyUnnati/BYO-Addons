@@ -1,0 +1,7 @@
+apiVersion: v2
+name: byo-addons
+description: A small Helm chart for the BYO Addons operator
+
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

@@ -1,0 +1,5 @@
+replicaCount: 1
+image:
+  repository: byo-addons-operator
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
